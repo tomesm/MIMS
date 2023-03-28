@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passenger Prioritization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f7f7f7;
+        }
+        .dropzone {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 400px;
+            height: 200px;
+            border: 3px dashed #888;
+            background-color: #fff;
+            color: #888;
+            font-size: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="dropzone" id="dropzone" draggable="true">
+        <p>Drag and drop a JSON file here</p>
+        <p>or</p>
+        <p><input type="file" id="fileInput" accept="application/json" /></p>
+    </div>
+    <script>
+        const dropzone = document.getElementById("dropzone");
+        const fileInput = document.getElementById("fileInput");
+
+        dropzone.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            dropzone.style.backgroundColor = "#eee";
+        });
+
+        dropzone.addEventListener("dragleave", (e) => {
+            e.preventDefault();
+            dropzone.style.backgroundColor = "#fff";
+        });
+
+        dropzone.addEventListener("drop", async (e) => {
+            e.preventDefault();
+            dropzone.style.backgroundColor = "#fff";
+            const file = e.dataTransfer.files[0];
+            if (file.type !== "application/json") {
+                alert("Please upload a JSON file.");
+            } else {
+                await processFile(file);
+            }
+        });
+
+        fileInput.addEventListener("change", async (e) => {
+            const file = e.target.files[0];
+            if (file.type !== "application/json") {
+                alert("Please upload a JSON file.");
+            } else {
+                await processFile(file);
+            }
+        });
+
+        async function processFile(file) {
+          if (!file) {
+                alert("No file selected");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            fetch("http://127.0.0.1:8000/prioritize", {
+                method: "POST",
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.error(error));
+        }
+    </script>
+</body>
+</html>
