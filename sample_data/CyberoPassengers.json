@@ -1,0 +1,122 @@
+[
+    {
+      "flight_id": 1001,
+      "first_name": "John",
+      "last_name": "Doe",
+      "age": 32,
+      "criminal_record": "None",
+      "health_status": "Good",
+      "colony": "New Washington",
+      "skills": "Mechanical Engineering",
+      "specialization": "Robotics",
+      "ticket_number": "NW-1001-1234"
+    },
+    {
+      "flight_id": 1002,
+      "first_name": "Jane",
+      "last_name": "Smith",
+      "age": 28,
+      "criminal_record": "None",
+      "health_status": "Good",
+      "colony": "Liberty Base",
+      "skills": "Biological Sciences",
+      "specialization": "Botany",
+      "ticket_number": "LB-1002-2345"
+    },
+    {
+      "flight_id": 1003,
+      "first_name": "Alice",
+      "last_name": "Johnson",
+      "age": 34,
+      "criminal_record": "None",
+      "health_status": "Good",
+      "colony": "Europa Outpost",
+      "skills": "Medicine",
+      "specialization": "General Practice",
+      "ticket_number": "EO-1003-3456"
+    },
+    {
+      "flight_id": 1004,
+      "first_name": "Bob",
+      "last_name": "Brown",
+      "age": 40,
+      "criminal_record": "None",
+      "health_status": "Good",
+      "colony": "Xin Tian Di",
+      "skills": "Physics",
+      "specialization": "Astrophysics",
+      "ticket_number": "XTD-1004-4567"
+    },
+    {
+      "flight_id": 1005,
+      "first_name": "Charlie",
+      "last_name": "Miller",
+      "age": 38,
+      "criminal_record": "None",
+      "health_status": "Good",
+      "colony": "Mangalyaan Nagar",
+      "skills": "Computer Science",
+      "specialization": "Artificial Intelligence",
+      "ticket_number": "MN-1005-5678"
+    },
+    {
+      "flight_id": 1006,
+      "first_name": "Diana",
+      "last_name": "Martinez",
+      "age": 29,
+      "criminal_record": "None",
+      "health_status": "Good",
+      "colony": "Rodina Station",
+      "skills": "Chemistry",
+      "specialization": "Materials Science",
+      "ticket_number": "RS-1006-6789"
+    },
+    {
+      "flight_id": 1007,
+      "first_name": "Evan",
+      "last_name": "Garcia",
+      "age": 45,
+      "criminal_record": "None",
+      "health_status": "Good",
+      "colony": "New Washington",
+      "skills": "Electrical Engineering",
+      "specialization": "Power Systems",
+      "ticket_number": "NW-1007-7890"
+    },
+    {
+      "flight_id": 1008,
+      "first_name": "Fiona",
+      "last_name": "Rodriguez",
+      "age": 31,
+      "criminal_record": "None",
+      "health_status": "Good",
+      "colony": "Liberty Base",
+      "skills": "Environmental Sciences",
+      "specialization": "Climate Science",
+      "ticket_number": "LB-1008-8901"
+    },
+    {
+    "flight_id": 1009,
+    "first_name": "George",
+    "last_name": "Taylor",
+    "age": 35,
+    "criminal_record": "None",
+    "health_status": "Good",
+    "colony": "Europa Outpost",
+    "skills": "Geology",
+    "specialization": "Planetary Science",
+    "ticket_number": "EO-1009-9012"
+    },
+    {
+    "flight_id": 1010,
+    "first_name": "Hannah",
+    "last_name": "Anderson",
+    "age": 27,
+    "criminal_record": "None",
+    "health_status": "Good",
+    "colony": "Xin Tian Di",
+    "skills": "Astronomy",
+    "specialization": "Observational Astronomy",
+    "ticket_number": "XTD-1010-0123"
+    }
+]

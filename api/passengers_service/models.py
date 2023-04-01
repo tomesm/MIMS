@@ -12,6 +12,6 @@ class PutPassengerRequest(BaseModel):
     colony: str 
     skills: str
     specialization: str
-    ticketnumber: str
-    status: str
+    ticket_number: str
+
 

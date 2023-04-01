@@ -1,0 +1,148 @@
+[
+    {
+      "id": "d18c628e-3e87-42a5-b957-17040dcc3595-1",
+      "colony_id": "52d474af-f112-4967-83af-db8559d3e94a",
+      "rule_type": "age",
+      "description": "18"
+    },
+    {
+      "id": "d18c628e-3e87-42a5-b957-17040dcc3595-2",
+      "colony_id": "52d474af-f112-4967-83af-db8559d3e94a",
+      "rule_type": "criminal_record",
+      "description": "None"
+    },
+    {
+      "id": "d18c628e-3e87-42a5-b957-17040dcc3595-3",
+      "colony_id": "52d474af-f112-4967-83af-db8559d3e94a",
+      "rule_type": "health_status",
+      "description": "Good"
+    },
+    {
+      "id": "d18c628e-3e87-42a5-b957-17040dcc3595-4",
+      "colony_id": "52d474af-f112-4967-83af-db8559d3e94a",
+      "rule_type": "specialization",
+      "description": "Engineering"
+    },
+    {
+      "id": "ec6a5651-4b37-41af-bc6c-77173b417af4-1",
+      "colony_id": "5ece00f1-b090-44dc-9803-e973f87392b7",
+      "rule_type": "age",
+      "description": "18"
+    },
+    {
+      "id": "ec6a5651-4b37-41af-bc6c-77173b417af4-2",
+      "colony_id": "5ece00f1-b090-44dc-9803-e973f87392b7",
+      "rule_type": "criminal_record",
+      "description": "None"
+    },
+    {
+      "id": "ec6a5651-4b37-41af-bc6c-77173b417af4-3",
+      "colony_id": "5ece00f1-b090-44dc-9803-e973f87392b7",
+      "rule_type": "health_status",
+      "description": "Good"
+    },
+    {
+      "id": "ec6a5651-4b37-41af-bc6c-77173b417af4-4",
+      "colony_id": "5ece00f1-b090-44dc-9803-e973f87392b7",
+      "rule_type": "specialization",
+      "description": "Engineering"
+    },
+    {
+      "id": "58939104-5e33-4b44-b50e-9700f8a21577-1",
+      "colony_id": "70542b48-51b9-4498-9f09-1185189da7b0",
+      "rule_type": "age",
+      "description": "18"
+    },
+    {
+        "id": "58939104-5e33-4b44-b50e-9700f8a21577-2",
+        "colony_id": "70542b48-51b9-4498-9f09-1185189da7b0",
+        "rule_type": "criminal_record",
+        "description": "None"
+      },
+      {
+        "id": "58939104-5e33-4b44-b50e-9700f8a21577-3",
+        "colony_id": "70542b48-51b9-4498-9f09-1185189da7b0",
+        "rule_type": "health_status",
+        "description": "Good"
+      },
+      {
+        "id": "58939104-5e33-4b44-b50e-9700f8a21577-4",
+        "colony_id": "70542b48-51b9-4498-9f09-1185189da7b0",
+        "rule_type": "specialization",
+        "description": "Engineering"
+      },
+      {
+        "id": "6740c60f-123b-4040-a35f-2942bd5d9da5-1",
+        "colony_id": "71be8b58-13e8-495f-967b-97429be84906",
+        "rule_type": "age",
+        "description": "18"
+      },
+      {
+        "id": "6740c60f-123b-4040-a35f-2942bd5d9da5-2",
+        "colony_id": "71be8b58-13e8-495f-967b-97429be84906",
+        "rule_type": "criminal_record",
+        "description": "None"
+      },
+      {
+        "id": "6740c60f-123b-4040-a35f-2942bd5d9da5-3",
+        "colony_id": "71be8b58-13e8-495f-967b-97429be84906",
+        "rule_type": "health_status",
+        "description": "Good"
+      },
+      {
+        "id": "6740c60f-123b-4040-a35f-2942bd5d9da5-4",
+        "colony_id": "71be8b58-13e8-495f-967b-97429be84906",
+        "rule_type": "specialization",
+        "description": "Engineering"
+      },
+      {
+        "id": "a4a9e0bb-5071-4ce1-8da5-23ae4acb3e26-1",
+        "colony_id": "7ecd6406-9978-45a4-8406-77e84fff33bc",
+        "rule_type": "age",
+        "description": "18"
+      },
+      {
+        "id": "a4a9e0bb-5071-4ce1-8da5-23ae4acb3e26-2",
+        "colony_id": "7ecd6406-9978-45a4-8406-77e84fff33bc",
+        "rule_type": "criminal_record",
+        "description": "None"
+      },
+      {
+        "id": "a4a9e0bb-5071-4ce1-8da5-23ae4acb3e26-3",
+        "colony_id": "7ecd6406-9978-45a4-8406-77e84fff33bc",
+        "rule_type": "health_status",
+         "description": "Good"
+      },
+      {
+        "id": "a4a9e0bb-5071-4ce1-8da5-23ae4acb3e26-4",
+        "colony_id": "7ecd6406-9978-45a4-8406-77e84fff33bc",
+        "rule_type": "specialization",
+        "description": "Engineering"
+      },
+      {
+        "id": "b8eaf07d-638f-4ab4-a26a-36bb82576cb6-1",
+        "colony_id": "de1685b3-3d2d-439d-9476-85ce6f9fc54a",
+        "rule_type": "age",
+        "description": "25"
+      },
+      {
+        "id": "b8eaf07d-638f-4ab4-a26a-36bb82576cb6-2",
+        "colony_id": "de1685b3-3d2d-439d-9476-85ce6f9fc54a",
+        "rule_type": "criminal_record",
+        "description": "None"
+      },
+      {
+        "id": "b8eaf07d-638f-4ab4-a26a-36bb82576cb6-3",
+        "colony_id": "de1685b3-3d2d-439d-9476-85ce6f9fc54a",
+        "rule_type": "health_status",
+        "description": "Good"
+      },
+      {
+        "id": "b8eaf07d-638f-4ab4-a26a-36bb82576cb6-4",
+        "colony_id": "de1685b3-3d2d-439d-9476-85ce6f9fc54a",
+        "rule_type": "specialization",
+        "description": "Engineering"
+      }
+]
+    
+  

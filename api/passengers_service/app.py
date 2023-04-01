@@ -6,9 +6,11 @@ import uvicorn
 
 import passengers_handler as ph
 from models import PutPassengerRequest
-
+import logging
+import httpx
  
 app = FastAPI()
+logging.basicConfig(level=logging.DEBUG)
 
 
 @app.get("/")
@@ -18,7 +20,6 @@ def read_root():
 
 @app.post("/passengers")
 async def create_passenger(request: PutPassengerRequest):
-    created_time = int(time.time())
     item = {
         "id": str(uuid4()),
         "flight_id": request.flight_id,
@@ -30,8 +31,8 @@ async def create_passenger(request: PutPassengerRequest):
         "colony": request.colony,
         "skills": request.skills,
         "specialization": request.specialization,
-        "ticket_number": request.ticketnumber,
-        "status": request.status,
+        "ticket_number": request.ticket_number,
+        "status": "new",
     }
     error = ph.create_passenger(item)
     if error:
@@ -46,39 +47,48 @@ async def create_passengers(file: UploadFile = File(...)):
     passengers = json.loads(content)
     # error = ph.create_passengers(passengers) # this is not working for now
     for passenger in passengers:
+        # logging.info("Passenger:" + str(passenger))
         item = {
-            "passenger_id": str(uuid4()),
+            "id": str(uuid4()),
+            "flight_id": passenger["flight_id"],
             "first_name": passenger["first_name"],
             "last_name": passenger["last_name"],
             "age": passenger["age"],
             "criminal_record": passenger["criminal_record"],
             "health_status": passenger["health_status"],
-            "dest_departure": passenger["dest_departure"],
-            "dest_arrival": passenger["dest_arrival"],
+            "colony": passenger["colony"],
+            "skills": passenger["skills"],
+            "specialization": passenger["specialization"],
+            "ticket_number": passenger["ticket_number"],
+            "status": "new",
         }
+        # logging.info("Passenger item:" + str(item))
         error = ph.create_passenger(item)
         if error:
             raise HTTPException(status_code=404, detail=f"Error creating passenger: {error}")
 
+    # Notify the immigration
+    await _notify_immigration()
     return {"message:": "Bulk passengers created"}
 
 
 @app.get("/passengers")
 async def list_passengers():
     items = ph.list_passengers()
-    if not items:
-        raise HTTPException(status_code=404, detail=f"No passengers found")
-    return {"passengers": items}
+    # if not items:
+    #     raise HTTPException(status_code=404, detail=f"No passengers found")
+    # return {"passengers": items}
+    return items
 
 
 @app.get("/passengers/{passenger_id}")
 async def get_passenger(passenger_id: str):
     item = ph.get_passenger(passenger_id)
-    if not item:
-        raise HTTPException(status_code=404, detail=f"Passenger {passenger_id} not found")
+    # if not item:
+    #     raise HTTPException(status_code=404, detail=f"Passenger {passenger_id} not found")
     return item
 
-@app.get("/passengers/flagged")
+@app.get("/passengers/new")
 async def get_flagged_passenger():
     items = ph.list_flagged_passengers()
     if not items:
@@ -118,6 +128,12 @@ async def delete_passengers():
         raise HTTPException(status_code=404, detail=f"Error deleting passengers: {error}")
     return { "message": "All passengers deleted" }
 
+
+
+async def _notify_immigration():
+    async with httpx.AsyncClient() as client:
+        r = await client.post("http://0.0.0.0:3031" + "/immigration/notify/new_passengers")
+    return r.json()
 
 
 if __name__ == "__main__":

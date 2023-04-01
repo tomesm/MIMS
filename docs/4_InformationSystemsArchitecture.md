@@ -44,7 +44,7 @@ Here's a brief summary of which microservices are responsible for database which
 Passenger Management Service - Passenger
 Immigration Service - ImmigrationCounter
 Docking Bay Management Service - DockingBay
-Colony Official Service - Colony, ImmigrationRule,
+Colony Service - Colony, ImmigrationRule, ColonyResources
 Orbital Station Manager Service - OrbitalStation, 
 Shuttle Bay Management Service - Shuttle, Shuttlebay
 User Management Service - User, Role, SystemPermission

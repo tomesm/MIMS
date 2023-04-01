@@ -5,8 +5,8 @@ from models import PutPassengerRequest
 import logging
 
 def create_passenger(passenger: dict):
-    logging.basicConfig(level=logging.INFO)
-    logging.info("Loging request: " + str(passenger))
+    # logging.basicConfig(level=logging.INFO)
+    # logging.info("Loging request: " + str(passenger))
     conn = get_db_connection()
     conn.set_session(autocommit=True)
     try:
@@ -57,21 +57,21 @@ def create_passengers(passengers):
 
 
 def get_passenger(passenger_id):
-    logging.info(f"get_passenger: passenger_id = {passenger_id}, type(passenger_id) = {type(passenger_id)}")
+    # logging.info(f"get_passenger: passenger_id = {passenger_id}, type(passenger_id) = {type(passenger_id)}")
     conn = get_db_connection()
     conn.set_session(autocommit=True)
     try:
         query = '''
             SELECT * FROM passenger WHERE id = CAST(%s AS BIGINT)
         '''
-        cur = conn.cursor()
-        logging.info(f"Executed query: {cur.mogrify(query, (passenger_id,)).decode('utf-8')}") 
-        logging.info(f"Cursor description: {cur.description}") 
-        logging.info(f"Row count: {cur.rowcount}")
+        cur = conn.cursor(cursor_factory=RealDictCursor)
+        # logging.info(f"Executed query: {cur.mogrify(query, (passenger_id,)).decode('utf-8')}") 
+        # logging.info(f"Cursor description: {cur.description}") 
+        # logging.info(f"Row count: {cur.rowcount}")
         # cur.execute(query, (passenger_id,))
         cur.execute('SELECT * FROM passenger WHERE id=%s', (passenger_id,))
         passenger = cur.fetchone()
-        logging.info(f"Passenger fetched: {passenger}")
+        # logging.info(f"Passenger fetched: {passenger}")
         cur.close()
         conn.close()
         return passenger

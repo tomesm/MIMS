@@ -1,0 +1,26 @@
+[
+    {
+      "id": "ec6a5651-4b37-41af-bc6c-77173b417af4-1",
+      "colony_id": "5ece00f1-b090-44dc-9803-e973f87392b7",
+      "rule_type": "age",
+      "description": "18"
+    },
+    {
+      "id": "ec6a5651-4b37-41af-bc6c-77173b417af4-2",
+      "colony_id": "5ece00f1-b090-44dc-9803-e973f87392b7",
+      "rule_type": "criminal_record",
+      "description": "None"
+    },
+    {
+      "id": "ec6a5651-4b37-41af-bc6c-77173b417af4-3",
+      "colony_id": "5ece00f1-b090-44dc-9803-e973f87392b7",
+      "rule_type": "health_status",
+      "description": "Good"
+    },
+    {
+      "id": "ec6a5651-4b37-41af-bc6c-77173b417af4-4",
+      "colony_id": "5ece00f1-b090-44dc-9803-e973f87392b7",
+      "rule_type": "specialization",
+      "description": "Engineering"
+    }
+]
