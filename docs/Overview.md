@@ -1,4 +1,4 @@
-# Cybero's Mars Immigration System
+# Overview
 
 Here's a suggested architecture design for the Cybero's Mars Immigration System based on TOGAF's Architecture Development Method (ADM):
 

@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: passenger-service
+  labels:
+    app: passenger-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: passenger-service
+  template:
+    metadata:
+      labels:
+        app: passenger-service
+        tier: service
+    spec:
+      containers:
+      - name: passenger-service
+        image: "cybero-mis-passenger-service:latest"
+        ports:
+        - containerPort: 8080
+        env:
+        - name: PORT
+          value: "8080"
+
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: immigration-service
+#   labels:
+#     app: immigration-service
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: immigration-service
+#   template:
+#     metadata:
+#       labels:
+#         app: immigration-service
+#     spec:
+#       containers:
+#       - name: immigration-service
+#         image: immigration_service_image
+#         ports:
+#         - containerPort: 80

@@ -1,1 +1,12 @@
 site_name: Cybero Mars Immigration System
+nav:
+  - 1. Preliminary Study: 1_PreliminaryStudy.md
+  - 2. Architecture Vision: 2_ArchitectureVision.md
+  - 3. Business Architecture: 3_BusinessArchitecture.md
+  - 4. Information System Architecture: 4_InformationSystemsArchitecture.md
+  - 5. Technology Architecture: 5_TechnologyArchitecture.md
+  - 6. Opportunities and Solutions: 6_OpportunitiesAndSolutions.md
+  - 6. Migration and Planning: 7_MigrationAndPlanning.md
+  - 8. Implementation Governance: 8_ImplementationGovernance.md
+  - 9. Architecture Change Management: 9_ArchitectureChangeManagement.md
+theme: readthedocs

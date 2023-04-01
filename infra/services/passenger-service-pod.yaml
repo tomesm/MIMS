@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cybero-mis-passenger-service
+  labels:
+    language: python
+    env: dev
+
+spec:
+  containers:
+  - name: cybero-mis-passenger-service
+    image: cybero-mis-passenger-service:0.1.0
+    ports:
+    - containerPort: 8080
+      protocol: TCP
