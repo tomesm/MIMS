@@ -1,0 +1,26 @@
+[
+    {
+      "flight_id": 1001,
+      "first_name": "John",
+      "last_name": "Granted",
+      "age": 32,
+      "criminal_record": "None",
+      "health_status": "Good",
+      "colony": "New Washington",
+      "skills": "Mechanical Engineering",
+      "specialization": "Engineering",
+      "ticket_number": "NW-1001-1234"
+    },
+    {
+      "flight_id": 1001,
+      "first_name": "John",
+      "last_name": "Flagged",
+      "age": 32,
+      "criminal_record": "Robber",
+      "health_status": "Good",
+      "colony": "New Washington",
+      "skills": "Mechanical Engineering",
+      "specialization": "Engineering",
+      "ticket_number": "NW-1001-1234"
+    }
+]

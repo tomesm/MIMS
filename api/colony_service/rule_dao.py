@@ -83,9 +83,9 @@ def update_rule(rule_id, rule):
             WHERE id = %s
         '''
         cur = conn.cursor(cursor_factory=RealDictCursor)
-        cur.execute(query, (rule.colony_id,
-                            rule.type,
-                            rule.description,
+        cur.execute(query, (rule["colony_id"],
+                            rule["rule_type"],
+                            rule["description"],
                             rule_id))
         updated_rule = cur.fetchone()
         cur.close()

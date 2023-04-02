@@ -4,8 +4,8 @@ from uuid import uuid4
 import json
 import uvicorn
 
-import passengers_handler as ph
-from models import PutPassengerRequest
+import passenger_dao as ph
+from requests import PutPassengerRequest
 import logging
 import httpx
  
@@ -80,6 +80,10 @@ async def list_passengers():
     # return {"passengers": items}
     return items
 
+@app.get("/passengers/status")
+async def list_by_status(status: str):
+    items = ph.list_by_status(status)
+    return items
 
 @app.get("/passengers/{passenger_id}")
 async def get_passenger(passenger_id: str):
@@ -88,26 +92,14 @@ async def get_passenger(passenger_id: str):
     #     raise HTTPException(status_code=404, detail=f"Passenger {passenger_id} not found")
     return item
 
-@app.get("/passengers/new")
-async def get_flagged_passenger():
-    items = ph.list_flagged_passengers()
-    if not items:
-        raise HTTPException(status_code=404, detail=f"No flagged opassenger not found")
-    return items
-
 
 @app.put("/passengers")
 async def update_passenger(passenger_id: str, request: PutPassengerRequest):
     item = ph.get_passenger(passenger_id)
     if item:
-        item["first_name"] = request.first_name
-        item["last_name"] = request.last_name
-        item["age"] = request.age
-        item["criminal_record"] = request.criminal_record
-        item["health_status"] = request.health_status
-        item["dest_departure"] = request.dest_departure
-        item["dest_arrival"] = request.dest_arrival
-        return {"passenger": ph.update_passenger(passenger_id, item)}
+        update_data = request.dict(exclude_unset=True)
+        updated_item = {**item, **update_data}
+        return {"passenger": ph.update_passenger(passenger_id, updated_item)}
     else:
         raise HTTPException(status_code=404, detail=f"Passenger {passenger_id} not found")
 

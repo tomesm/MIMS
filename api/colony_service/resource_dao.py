@@ -55,15 +55,16 @@ def get_resource(resource_id):
         print(f"Error: {e}")
         return {}
 
-
-def list_resources():
+# list all resources for given colony id
+def list_resources(colony_id):
     conn = get_db_connection()
+    conn.set_session(autocommit=True)
     try:
         query = '''
-            SELECT * FROM colony_resource
+            SELECT * FROM colony_resource WHERE colony_id = %s
         '''
         cur = conn.cursor(cursor_factory=RealDictCursor)
-        cur.execute(query)
+        cur.execute(query, (colony_id,))
         resources = cur.fetchall()
         cur.close()
         conn.close()

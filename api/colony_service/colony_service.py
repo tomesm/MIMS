@@ -1,9 +1,11 @@
+import datetime
 import time
 from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi.param_functions import Path
 from uuid import uuid4
 import uvicorn
 import json
+import random
 
 
 import logging
@@ -11,16 +13,62 @@ import logging
 import resource_dao
 import rule_dao
 import colony_dao
-from models import PutColonyResourceRequest, PutImmigrationRuleRequest, PutColonyRequest
-
+from requests import PutColonyResourceRequest, PutImmigrationRuleRequest, PutColonyRequest
+from pydantic import BaseModel
+from typing import Optional
 
 app = FastAPI()
 logging.basicConfig(level=logging.INFO)
 
 
+class VisaResponse(BaseModel):
+    id: int
+    duration: int
+    issue_date: datetime
+    immigration_counter_id: int
+    colony_id: int
+
+
 @app.get("/")
 def read_root():
     return {"message": "Hello from colony service"}
+
+
+######### Visas #########
+
+@app.post("/colonies/{colony_id}/visas", response_model=VisaResponse)
+async def create_visa(colony_id: int):
+    # Check if the colony and passenger exist
+    colony = colony_dao.get_colony(colony_id)
+
+    if not colony:
+        raise HTTPException(status_code=404, detail="Colony or passenger not found")
+    # Set visa attributes (customize these as needed)
+    visa_duration = 90  # Set the visa duration (in days)
+    issue_date = datetime.now()  # Set the visa issue date
+    immigration_counter_id = 1  # Set the immigration counter ID (customize this)
+
+    # Insert the new visa record into the database
+    # visa_id = visa_dao.create_visa(
+    #     colony_id,
+    #     passenger_id,        
+    #     visa_duration,
+    #     issue_date,
+    #     immigration_counter_id,
+    # )
+
+    # Return the created visa
+    return VisaResponse(
+        id=visa_id,
+        duration=visa_duration,
+        issue_date=issue_date,
+        immigration_counter_id=immigration_counter_id,
+        colony_id=colony_id,
+    )
+
+######### Colonies  #########
+
+
 
 
 # Create colony
@@ -51,18 +99,21 @@ async def list_colonies():
     items = colony_dao.list_colonies()
     return {"colonies:": items}
 
-# Update colony
+
 @app.put("/colonies/{colony_id}")
 async def update_colony(colony_id, request: PutColonyRequest):
-    item = {
-        "id": colony_id,
-        "name": request.name,
-        "inhabitants": request.inhabitants
-    }
-    error = colony_dao.update_colony(colony_id, item)
-    if error:
-        raise HTTPException(status_code=404, detail=f"Error updating colony: {error}")
-    return {"colony:": item}
+    # Fetch the existing colony from your data source (e.g., list or database)
+    item = colony_dao.get_colony(colony_id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Colony not found")
+    if item:
+        update_data = request.dict(exclude_unset=True)
+        updated_item = {**item, **update_data}
+        return {"colony": colony_dao.update_colony(colony_id, updated_item)}
+    else:
+        raise HTTPException(status_code=404, detail=f"Colony {colony_id} not found")
+    
+
 
 # Delete colony
 @app.delete("/colonies/{colony_id}")
@@ -71,6 +122,26 @@ async def delete_colony(colony_id):
     if error:
         raise HTTPException(status_code=404, detail=f"Error deleting colony: {error}")
     return {"message": f"Colony {colony_id} deleted"}
+
+
+############ Resources ############
+
+# API endpoint for grant resource request
+@app.post("/colonies/{colony_id}/resources/grant")
+async def grant_resource(colony_id):
+    # Get resource for the colony_id
+    # Check if resource is available
+    # If available, grant resource
+    # If not available, return message
+
+    # for POC demo just mock the response
+    # Generate a random number between 0 and 1
+    random_number = random.random()
+
+    if random_number <= 0.9:  # 90% probability of success
+        return {"message": f"Resources granted"}
+    else:  # 10% probability of error
+        raise HTTPException(status_code=404, detail="Resources could not be granted")
 
 
 # Create resource for given colony
@@ -100,7 +171,7 @@ async def get_resource(colony_id, resource_id):
 @app.get("/colonies/{colony_id}/resources")
 async def list_resources(colony_id):
     items = resource_dao.list_resources(colony_id)
-    return {"resources:": items}
+    return items
 
 # Update resource
 @app.put("/colonies/{colony_id}/resources/{resource_id}")
@@ -125,6 +196,8 @@ async def delete_resource(colony_id, resource_id):
         raise HTTPException(status_code=404, detail=f"Error deleting resource: {error}")
     return {"message": f"Resource {resource_id} deleted"}
 
+
+############ Rules ############
 
 
 # Create ImmigrationRule for given colony
@@ -188,12 +261,10 @@ async def update_rule(colony_id, rule_id, request: PutImmigrationRuleRequest):
         "rule_type": request.rule_type,
         "description": request.description
     }
-    error = rule_dao.update_rule(item)
+    error = rule_dao.update_rule(rule_id, item)
     if error:
         raise HTTPException(status_code=404, detail=f"Error updating rule: {error}")
     return {"rule:": item}
-
-
 
 # Delete one rule
 @app.delete("/colonies/{colony_id}/rules/{rule_id}")
@@ -211,73 +282,6 @@ async def delete_rules(colony_id):
     if error:
         raise HTTPException(status_code=404, detail=f"Error deleting rules: {error}")
     return {"message": "Rules deleted"}
-
-
-
-# @app.post("/colonies/resources")
-# async def create_resource(request: PutColonyResourceRequest):
-#     item = {
-#         "id": str(uuid4()),
-#         "colony_id": str(uuid4()),
-#         "name": request.name,
-#         "air": request.air,
-#         "lodging": request.lodging,
-#         "food": request.food,
-#         "water": request.water
-#     }
-#     error = resource_dao.create_resource(item)
-#     if error:
-#         raise HTTPException(status_code=404, detail=f"Error creating resource: {error}")
-#     return {"resource:": item}
-
-
-# @app.get("/colonies/resources")
-# async def get_resources():
-#     resources = resource_dao.list_resources()
-#     if resources is None:
-#         raise HTTPException(status_code=404, detail=f"Error getting resourcs")
-#     return {"resource:": resources}
-
-
-# @app.get("/colonies/resources/{id}")
-# async def get_resource(id):
-#     resource = resource_dao.get_resource(id)
-#     if resource is None:
-#         raise HTTPException(status_code=404, detail=f"Error getting resource")
-#     return {"resource:": resource}
-
-
-# @app.put("/colonies/resources/{id}")
-# async def update_resource(id, request: PutColonyResourceRequest):
-#     item = {
-#         "id": id,
-#         "colony_id": request.colony_id,
-#         "name": request.name,
-#         "air": request.air,
-#         "lodging": request.lodging,
-#         "food": request.food,
-#         "water": request.water
-#     }
-#     error = resource_dao.update_resource(id, item)
-#     if error:
-#         raise HTTPException(status_code=404, detail=f"Error updating resource: {error}")
-#     return {"resource:": item}
-
-
-# @app.delete("/colonies/resources/{id}")
-# async def delete_resource(id):
-#     error = resource_dao.delete_resource(id)
-#     if error:
-#         raise HTTPException(status_code=404, detail=f"Error deleting resource")
-#     return {"message": "Resource deleted"}
-
-
-# @app.delete("/colonies/resources")
-# async def delete_resources():
-#     error = resource_dao.delete_resources()
-#     if error:
-#         raise HTTPException(status_code=404, detail=f"Error deleting resources")
-#     return {"message": "Resources deleted"}
 
 
 

@@ -1,7 +1,6 @@
 from psycopg2 import Error
 from psycopg2.extras import RealDictCursor
 from db import get_db_connection
-from models import PutPassengerRequest
 import logging
 
 def create_passenger(passenger: dict):
@@ -78,6 +77,26 @@ def get_passenger(passenger_id):
     except Error as e:
         print(f"Error: {e}")
         return {}
+    
+
+# List all passengers with given "status" attribute. Status is a string param for thios function
+def list_by_status(status):
+    conn = get_db_connection()
+    conn.set_session(autocommit=True)
+    try:
+        query = '''
+            SELECT * FROM passenger WHERE status = %s
+        '''
+        cur = conn.cursor(cursor_factory=RealDictCursor)
+        cur.execute(query, (status,))
+        passengers = cur.fetchall()
+        cur.close()
+        conn.close()
+        return passengers
+    except Error as e:
+        print(f"Error: {e}")
+        return []
+    
 
 def list_passengers():
     conn = get_db_connection()
@@ -95,54 +114,28 @@ def list_passengers():
         print(f"Error: {e}")
         return []
 
-def list_flagged_passengers():
-    conn = get_db_connection()
-    try:
-        query = '''
-            SELECT * FROM passenger WHERE criminal_record IS NOT NULL OR health_status IS NOT NULL
-        '''
-        cur = conn.cursor(cursor_factory=RealDictCursor)
-        cur.execute(query)
-        passengers = cur.fetchall()
-        cur.close()
-        conn.close()
-        return passengers
-    except Error as e:
-        print(f"Error: {e}")
-        return []
-
-def update_passenger(passenger_id, passenger: dict):
+def update_passenger(passenger_id, passenger):
     conn = get_db_connection()
     conn.set_session(autocommit=True)
     try:
-        query = '''
+        # Prepare the update query with non-None values
+        update_fields = []
+        update_values = []
+        for field, value in passenger.items():
+            if value is not None:
+                update_fields.append(f"{field} = %s")
+                update_values.append(value)
+
+        query = f'''
             UPDATE passenger
-            SET flight_id = %s,
-                first_name = %s,
-                last_name = %s,
-                age = %s,
-                criminal_record = %s,
-                health_status = %s,
-                colony = %s,
-                skills = %s,
-                specialization = %s,
-                ticket_number = %s,
-                status = %s
+            SET {', '.join(update_fields)}
             WHERE id = %s
         '''
+        update_values.append(passenger_id)
+
         cur = conn.cursor(cursor_factory=RealDictCursor)
-        cur.execute(query, (passenger["flight_id"],
-                            passenger["first_name"],
-                            passenger["last_name"],
-                            passenger["age"],
-                            passenger["criminal_record"],
-                            passenger["health_status"],
-                            passenger["colony"],
-                            passenger["skills"],
-                            passenger["specialization"],
-                            passenger["ticket_number"],
-                            passenger["status"],
-                            passenger_id))
+        cur.execute(query, tuple(update_values))
+
         # Query the updated record
         fetch_query = '''
             SELECT * FROM passenger WHERE id = %s
@@ -155,6 +148,7 @@ def update_passenger(passenger_id, passenger: dict):
     except Error as e:
         message = f"updating passenger {e}"
         return {"error": message}
+
 
 def delete_passenger(passenger_id: str):
     conn = get_db_connection()

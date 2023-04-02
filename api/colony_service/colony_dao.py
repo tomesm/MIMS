@@ -70,30 +70,38 @@ def list_colonies():
 
 
 def update_colony(colony_id, colony):
-    logging.info(f"Updating colony: {colony} (id: {colony_id}")
+    # logging.info(f"Updating colony: {colony} (id: {colony_id})")
     conn = get_db_connection()
     conn.set_session(autocommit=True)
     try:
-        query = '''
+        # Prepare the SET clause for updating only provided fields
+        update_fields = []
+        update_values = []
+
+        for field, value in colony.items():
+            if value is not None:
+                update_fields.append(f"{field} = %s")
+                update_values.append(value)
+
+        query = f'''
             UPDATE colony
-            SET name = %s,
-                inhabitants = %s
+            SET {', '.join(update_fields)}
             WHERE id = %s
         '''
+        update_values.append(colony_id)
         cur = conn.cursor(cursor_factory=RealDictCursor)
-        cur.execute(query, (colony["name"],
-                            colony["inhabitants"],
-                            colony_id))
+        cur.execute(query, tuple(update_values))
+
         # Query the updated record
         fetch_query = '''
             SELECT * FROM colony WHERE id = %s
         '''
         cur.execute(fetch_query, (colony_id,))
         updated_colony = cur.fetchone()
-        logging.info(f"colony fetched: {updated_colony}")
+        # logging.info(f"colony fetched: {updated_colony}")
         cur.close()
         conn.close()
-        return {"updated_colony": updated_colony}
+        return updated_colony
     except Error as e:
         logging.error(f"updating colony {e}")
         # return {"error": message}
