@@ -26,9 +26,6 @@ Attributes:
 - status: status of his visa application
 
 
-Functions:
-- requestGuidance(): Retrieve guidance for the passenger's journey through the orbital station
-
 ## Spaceline
 This entity represents a company providing transportation to and from Mars. It stores information about the company, their spacecraft, and schedules. 
 
@@ -185,11 +182,6 @@ Attributes:
 - orbital_station_id
 
 
-Functions:
-- updateStatus(newStatus): Update the status of the docking bay
-- assignSpacecraft(spacecraft: Spacecraft): Assign a spacecraft to the docking bay
-- unassignSpacecraft(): Remove the spacecraft assignment from the docking bay
-
 ## Shuttlebay
 This entity represents a shuttle bay at the orbital station or a Mars colony where shuttles can dock and undock. It includes details about its current status and associated shuttle.
 
@@ -199,11 +191,6 @@ Attributes:
 - status: The current status of the shuttle bay (e.g., available, occupied, under maintenance)
 - shuttle: The shuttle currently docked at the shuttle bay (if any)
 - orbital_station_id
-
-Functions:
-- updateStatus(newStatus): Update the status of the shuttle bay
-- assignShuttle(shuttle: Shuttle): Assign a shuttle to the shuttle bay
-- unassignShuttle(): Remove the shuttle assignment from the shuttle bay
 
 ## ImmigrationRule
 Represents a rule or requirement for immigration to a Mars colony. These rules are used to determine if a passenger is eligible for automatic visa granting or if they need to go through manual visa processing at an immigration counter.

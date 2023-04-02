@@ -11,12 +11,11 @@ logging.basicConfig(level=logging.INFO)
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # You can specify the allowed origins here, use "*" to allow all origins
+    allow_origins=["*"],  
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 colonies = {
     "de1685b3-3d2d-439d-9476-85ce6f9fc54a": "New Washington",
@@ -27,12 +26,8 @@ colonies = {
     "52d474af-f112-4967-83af-db8559d3e94a": "Rodina Station",
 }
 
-
-
 passengers_service_base_url = "http://0.0.0.0:3030"
 colony_service_base_url = "http://0.0.0.0:3032"
-
-
 
 
 @app.get("/")
@@ -45,38 +40,25 @@ def read_root():
 @app.post("/immigration/notify/new_passengers")
 async def handle_notification():
     passengers = await _get_new_passengers()
-    # logging.info("Passengers: " + str(passengers))
     for passenger in passengers:
         colony_id = next((key for key, value in colonies.items() if value == passenger["colony"]), None)
-        # logging.info("Colony id: " + str(colony_id))
 
         colony_rules = await _get_colony_rules(colony_id)
-        # logging.info("Colony rules: " + str(colony_rules))    
 
         if _evaluate_passenger(passenger, colony_rules):
-            # logging.info("Passenger is eligible for automatic visa grant: " + str(passenger["first_name"] + " " + passenger["last_name"]))
-            # ask for granting colony resources
             url = f"http://0.0.0.0:3032/colonies/{colony_id}/resources/grant"
             r = httpx.post(url)
-            # upon receiving confirmation update passenger status: "visa_granted"
             if r.status_code == 200:
                 passenger["status"] = "visa_pre_granted"
+                logging.info("Passenger is pre-approved: " + str(passenger["first_name"] + " " + passenger["last_name"]))
                 await _update_passenger(passenger)
-                # Send visa request to colony service
-                # visa_url = f"http://0.0.0.0:3032/colonies/{colony_id}/visas"
-                # r = httpx.post(visa_url)
-                # # logging.info("Visa response: " + str(r.json()))
-
-                # if r.status_code == 200:
-                #     passenger["visa_id"] = r.json()["visa_id"]
-                #     # logging.info(f"Updated passenger with visa: {passenger}")
-                #     await _update_passenger(passenger)
             else:
                 passenger["status"] = "visa_denied"
+                logging.info("Passenger is denied: " + str(passenger["first_name"] + " " + passenger["last_name"]))
                 await _update_passenger(passenger)
         # if the passenger is not eligible for automatic visa grant change passengers status to "flagged"
         else:
-            logging.info("Passenger is not eligible for automatic visa grant: " + str(passenger["first_name"] + " " + passenger["last_name"]))
+            logging.info("Passenger is flagged: " + str(passenger["first_name"] + " " + passenger["last_name"]))
             # update passenger status: "flagged"
             passenger["status"] = "flagged"
             # send updated pasenger back to passenger service via httpx
@@ -88,17 +70,9 @@ async def _update_passenger(passenger):
     r = httpx.put(f"http://0.0.0.0:3030/passengers?passenger_id={passenger_id}", json=passenger)
 
 
-    if r.status_code == 200:
-        print("Passenger status updated successfully")
-    else:
-        print("Failed to update passenger status" + r.text)
-
-
 
 def _evaluate_rule(passenger, rule) -> bool:
     rule_type = rule["rule_type"]
-    # logging.info("Passenger : " + str(passenger))
-    # logging.info("Rule description: " + str(rule["description"]))
     if rule_type == "age":
         return int(passenger["age"]) >= int(rule["description"])
     elif rule_type == "criminal_record":
@@ -121,8 +95,6 @@ def _evaluate_passenger(passenger, colony_rules) -> bool:
 
 
 async def _get_new_passengers():
-    
-    # get passengers from the passenger service
     async with httpx.AsyncClient() as client:
         r = await client.get(passengers_service_base_url + "/passengers")
     return r.json()

@@ -6,28 +6,30 @@ The project involves developing a web application for managing a Mars colony wit
 
 ## Cost Breakdown
 
+Estimated length: 9 months
+
 ### Development Team
 
-- Project Manager: X hours * $Y/hr = $Z
-- Backend Developer: X hours * $Y/hr = $Z
-- Frontend Developer: X hours * $Y/hr = $Z
-- QA Engineer: X hours * $Y/hr = $Z
+- Project Manager: 36000 usd
+- Backend Developer: 63000 usd
+- Frontend Developer: 55000 usd
+- Devops Engineer: 57000 usd
 
 ### Infrastructure
 
-- Server Hosting: $X/month
-- Database Hosting: $Y/month
-- Domain Registration: $Z/year
+- Server Hosting: 200$/month
+- Database Hosting: 80$/month
 
 ### Miscellaneous
 
-- Third-party APIs: $X
-- Development Tools & Software: $Y
+- Third-party APIs: none
+- Development Tools & Software: none
 
 ## Total Estimated Cost
 
-- Development Team: $X
-- Infrastructure: $Y
-- Miscellaneous: $Z
+- Development Team: 221000
+- Infrastructure: 2520
+- Miscellaneous: 1000
 
-**Grand Total: $T**
+Grand Total: 214530
+

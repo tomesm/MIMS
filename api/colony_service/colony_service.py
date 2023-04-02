@@ -1,22 +1,16 @@
-import datetime
-import time
 from fastapi import FastAPI, HTTPException, UploadFile, File
-from fastapi.param_functions import Path
 from fastapi.middleware.cors import CORSMiddleware
 from uuid import uuid4
 import uvicorn
 import json
 import random
-
-
 import logging
+
+from requests import PutColonyResourceRequest, PutImmigrationRuleRequest, PutColonyRequest
 
 import resource_dao
 import rule_dao
 import colony_dao
-from requests import PutColonyResourceRequest, PutImmigrationRuleRequest, PutColonyRequest
-from pydantic import BaseModel
-from typing import Optional
 
 app = FastAPI()
 logging.basicConfig(level=logging.INFO)
@@ -24,7 +18,7 @@ logging.basicConfig(level=logging.INFO)
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # You can specify the allowed origins here, use "*" to allow all origins
+    allow_origins=["*"],  
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -96,7 +90,6 @@ async def update_colony(colony_id, request: PutColonyRequest):
         raise HTTPException(status_code=404, detail=f"Colony {colony_id} not found")
     
 
-
 # Delete colony
 @app.delete("/colonies/{colony_id}")
 async def delete_colony(colony_id):
@@ -118,10 +111,7 @@ async def delete_colony(colony_id):
 # refuse if otherwise
 @app.post("/colonies/{colony_id}/resources/grant")
 async def grant_resource(colony_id):
-    # Get the colony
-    # colony = colony_dao.get_colony(colony_id)
-    # if colony is None:
-    #     raise HTTPException(status_code=404, detail=f"Colony not found: {colony_id}")
+    #Mock it for now
     
     random_number = random.random()
 
@@ -192,8 +182,6 @@ async def delete_resource(colony_id, resource_id):
 # Create ImmigrationRule for given colony
 @app.post("/colonies/{colony_id}/rules")
 async def create_rule(colony_id, request: PutImmigrationRuleRequest):
-    # logging.info("Creating rule for colony: %s", colony_id)
-    # logging.info("request: %s", request)
     item = {
         "id": str(uuid4()),
         "colony_id": colony_id,
@@ -224,8 +212,6 @@ async def get_rule(colony_id, rule_id):
 # Create bulk request for colony rules
 @app.post("/colonies/{colony_id}/rules/bulk")
 async def create_bulk_rules(colony_id, file: UploadFile = File(...)):
-    # logging.info("Creating bulk rules for colony: %s", colony_id)
-    # logging.info("request: %s", request)
     content = await file.read()
     rules = json.loads(content)
     for rule in rules:
@@ -271,7 +257,6 @@ async def delete_rules(colony_id):
     if error:
         raise HTTPException(status_code=404, detail=f"Error deleting rules: {error}")
     return {"message": "Rules deleted"}
-
 
 
 if __name__ == "__main__":
