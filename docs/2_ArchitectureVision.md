@@ -1,6 +1,6 @@
 # 2. Architecture Vision
 
-The Mars Immigration System aims to provide a seamless, secure, and efficient process for managing the immigration of passengers arriving at Mars colonies. The system will be built on a microservices architecture, utilizing Kubernetes and Python to ensure scalability, flexibility, and maintainability.
+The Mars Immigration System aims to provide a seamless, secure, and efficient process for managing the immigration of passengers arriving at Mars colonies. The system will be built on a microservices architecture, utilizing local Kubernetes cluster to ensure scalability, flexibility, and maintainability.
 
 ## 2.1 Goals and Objectives
 
@@ -22,16 +22,19 @@ The Mars Immigration System aims to provide a seamless, secure, and efficient pr
 The Mars Immigration System will be composed of the following main components:
 
 - **Kubernetes Cluster**: The cluster will run locally on Mars stations, providing a scalable and resilient platform for running microservices.
-- **Python Microservices**: The backend will consist of REST API endpoints, implemented as microservices in Python.
+- **Microservices**: The backend will consist of REST API endpoints, implemented as microservices.
 - **Frontend Applications**: Web and mobile applications will be built on top of the APIs, providing a user-friendly interface for passengers and immigration officers.
 
 ### 2.3.1 Kubernetes Cluster
 
 The Kubernetes cluster will be responsible for orchestrating and managing the deployment, scaling, and operation of the microservices. This cluster will run locally on Mars stations, ensuring a high level of availability and performance.
 
-### 2.3.2 Python Microservices
+Choosing local kubernetes cluster is currently the best option given the fact that on mars there are no public cloud providers to run serverless architecture (which would be cheaper).
 
-The backend will be implemented as a collection of microservices written in Python. These microservices will expose REST API endpoints, enabling communication between the frontend applications and the underlying data stores. The microservices will be responsible for implementing business logic, managing data, and enforcing access control based on user roles.
+### 2.3.2 Microservices
+
+The backend will be implemented as a collection of microservices. These microservices will expose REST API endpoints, enabling communication between the frontend applications and the underlying data stores. The microservices will be responsible for implementing business logic, managing data, and enforcing access control based on user roles.
+
 
 ### 2.3.3 Frontend Applications
 
@@ -44,5 +47,6 @@ The frontend applications will provide a user interface for passengers and immig
 - **Spaceline Dispatchers**: Spaceline dispatchers will be responsible for coordinating passenger transport between Earth and Mars. Their main concerns will be efficient communication with the immigration system and accurate passenger information.
 - **Colony Officials**: Colony officials will be involved in setting immigration policies and monitoring the overall immigration process. Their main concerns will be compliance with regulations and efficient management of the immigration system.
 - **Station Managers**: Station managers see crucial metrics ofthe station operations. They can see flight schedules and plans dock bay maintenance accordingly.
+- **Shuttle DIspatchers**: Responsible for shuttles
 - **System Administrators**: System administrators will be responsible for managing the Kubernetes cluster and ensuring the smooth operation of the system. Their main concerns will be scalability, maintainability, and security.
 

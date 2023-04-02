@@ -15,9 +15,18 @@ sequenceDiagram
     PM-->>AP: Send  passenger
     AP-->>AP: Checks passenger status
     alt Eligible for visa
-        AP->>P: Notify & provide guidance to shuttle bay
+        AP-->>CS: Ask for resources
+        alt Resources granted
+            CS-->>AP: Resources granted
+            AP->>P: Notify & provide guidance to shuttle bay
+        else Resources not granted
+            CS-->>AP: Resources not granted
+            AP->>P: Visa denied.
+        end
+        
         P->>IO: Pass through immigration counter
         IO-->>IO: Just controls passengers passport or IDs
+        IO-->>P: Ok to go
         P->>ShuttleBay: Proceed to shuttle bay
     else Flagged
         AP->>P: Notify about flag

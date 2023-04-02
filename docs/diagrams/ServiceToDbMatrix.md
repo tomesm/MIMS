@@ -3,8 +3,10 @@ classDiagram
 PassengerManagementService -- Passenger
 ImmigrationService -- ImmigrationCounter
 DockingBayManagementService -- DockingBay
-ColonyOfficialService -- Colony
-ColonyOfficialService -- ImmigrationRule
+ColonyService -- Colony
+ColonyService -- ImmigrationRule
+ColonyService -- ColonyResources
+ColonyService -- Visa
 OrbitalStationManagerService -- OrbitalStation
 ShuttleBayManagementService -- Shuttle
 ShuttleBayManagementService -- Shuttlebay

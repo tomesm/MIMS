@@ -6,8 +6,8 @@ In this section, we will define the technology stack and infrastructure componen
 
 The following technology stack will be used to develop the Mars immigration system:
 
-- **Programming Language**: Python
-- **API Framework**: FastAPI
+- **Programming Language**: Go/Rust
+- **API Framework**: net/http(golang)/Actix(Rust)
 - **Frontend**: React.js (web) or React Native (mobile)
 - **Database**: CockroachDB (distributed SQL database)
 - **Orchestration & Deployment**: Kubernetes

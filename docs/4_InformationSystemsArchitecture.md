@@ -4,33 +4,221 @@ In this section, we will define the data entities, relationships, data flows, an
 
 ## 4.1 Data Architecture
 
+The following picture represents a high level data model:
+
+![alt text](./pictures/data_model_basic.png "Title")
+
 ### Data Entities
 
-- **Passenger**: Represents an individual arriving at the Mars station.
-- **Visa**: Represents a temporary visa issued to a passenger, with a specified duration (6, 12, 18, or 24 Mars months).
-- **Colony**: Represents a Mars colony with specific immigration rules and regulations.
-- **User**: Represents a system user with a specific role (e.g., Passenger, Immigration Officer, Station Manager, Spaceline Dispatcher, Colony Official, etc.)
-- **DockingBay**: Represents a docking bay at the Mars station for arriving and departing spacecraft.
+### Passenger
+Represents a passenger. It stores information required for immigration procedures, guidance through the orbital station, and boarding information.
 
-### Relationships
+Attributes:
 
-- **Passenger** has one or more **Visa** applications.
-- **Visa** is issued by a **Colony**.
-- **User** is associated with a **Role** (e.g., Passenger, Immigration Officer, Station Manager, etc.)
-- **DockingBay** is managed by a **Station Manager** and used by **Spaceline Dispatcher** to assign spacecraft.
+- id: Unique identifier for the passenger
+- name: Full name of the passenger
+- ticketNumber: Unique ticket number for their journey
+- healthCheck: Health check results for the passenger
+- criminalRecord: Criminal record information for the passenger
+- visa: Associated visa information for the passenger
+- specialization: Job or skill the passenger posses (eg. IT, surgeon, etc)
+- flightNumber: Number of flight.
+- status: status of his visa application
 
-### Data Flows
 
-![alt Visa Process Sequence](./pictures/visa_process_sequence.png)
+Functions:
+- requestGuidance(): Retrieve guidance for the passenger's journey through the orbital station
 
-1. Passengers register and submit visa applications, which include their personal information and visa preferences.
-2. Immigration officers access the system to review and process visa applications.
-3. The system stores the visa status (approved or denied) and relevant details.
-4. Station managers and other authorized personnel access the system to view resource allocation, docking bay assignments, and other relevant information.
+## Spaceline
+This entity represents a company providing transportation to and from Mars. It stores information about the company, their spacecraft, and schedules. 
+
+Attributes:
+
+- id: Unique identifier for the spaceline
+- name: Name of the spaceline
+
+
+## Spacecraft
+Represents the spacecraft belonging to a Spaceline, including its passenger capacity.
+
+Attributes:
+
+- id: Unique identifier for the spacecraft
+- name: Name of the spacecraft
+- capacity: Number of passengers the spacecraft can carry
+- spacelineId: Spaceline id
+
+## Colony
+This entity represents a Mars colony, with details about the number of inhabitants, resources, and immigration rules.
+
+Attributes:
+
+- id: Unique identifier for the colony
+- name: Name of the colony
+- inhabitants: Number of current inhabitants in the colony
+
+
+## ColonyResource
+This entity represents resources avaliable for the colony
+
+Attributes:
+
+- id: Unique identifier for the colony
+- name: Name of the resource
+- colony_id: ID of the colony
+- air: available air in m3
+- lodging: available lodging in number of places 
+- food: availabe food in kilograms
+
+
+## OrbitalStation
+This entity represents an orbital station, either Quaid or Hauser. The station is responsible for 
+managing passenger processing, visa controls, and processing times.
+
+Attributes:
+
+- id: Unique identifier for the orbital station
+- name: Name of the orbital station
+- passengerCapacity: Maximum number of concurrent passengers the station can handle
+
+
+## Flight
+This entity represents a flight between Earth and Mars or between Mars colonies. It includes details about the departure and arrival times, the Spaceline, and the spacecraft.
+
+Attributes
+
+- flightId: Unique identifier for the flight.
+- spaceLineID: Spaceline id
+- departureTime: The scheduled departure time of the flight.
+- arrivalTime: The scheduled arrival time of the flight.
+- origin: The location where the flight departs from (Earth or a Mars colony).
+- destination: The location where the flight arrives (a Mars colony or Earth).
+- spacecraft: The spacecraft used for the flight.
+- shuttle: Shuttle assigned for this flight
+- passengers: List of passengers
+
+
+## Shuttle
+This entity represents a small transport ship used to transport passengers from the orbital station to their destination colony on Mars or vice versa. 
+
+Attributes
+
+- shuttleId: Unique identifier for the shuttle.
+- capacity: The maximum number of passengers the shuttle can carry.
+- departureTime: The scheduled departure time of the shuttle.
+- arrivalTime: The scheduled arrival time of the shuttle.
+- associatedFlight: The flight that the shuttle is associated with.
+- shuttle_bay_number: Shuttle bay number for docking.  
+
+
+## ImmigrationCounter
+This entity represents an immigration counter at the orbital station, responsible for visa control and processing of passengers.
+
+Attributes:
+
+- id: Unique identifier for the immigration counter
+- officerId: The ID of the immigration officer assigned to the counter
+- status: The current status of the counter (e.g., open, closed, occupied)
+- orbital_station_id
+
+
+## Visa
+This entity represents a temporary visa issued for passengers traveling to Mars colonies, with details about 
+the duration and the colony for which it is valid.
+
+Attributes:
+
+- id: Unique identifier for the visa
+- duration: Duration of the visa in Mars months
+- colony: The Mars colony for which the visa is valid
+- issued_by: ImmigrationCounter id
+- time_of_issue: Timestamp
+
+## Role
+This entity represents the different roles or actors within the system. 
+It defines the specific permissions and access levels granted to each user based on their role. 
+Roles can include Passenger, Immigration Officer, Spaceline Dispatcher, Colony Official, and Station Manager. 
+Each role has a distinct set of responsibilities and allowed actions within the system.
+
+Attributes:
+
+- id: Unique identifier for the role
+- user_id: Identifier of the user with this permission
+- name: Name of the role
+- permissions: List of system permissions associated with the role
+
+
+## SystemPermission
+
+This entity represents the specific actions or operations that a user with a certain role is allowed to perform within the system. 
+
+Permissions are associated with roles, and users with a specific role inherit the permissions assigned to that role. 
+Examples of permissions can include creating, updating, or deleting records, accessing certain features 
+or functionalities, and managing specific parts of the system.
+
+Attributes:
+
+- id: Unique identifier for the permission
+- name: Name of the permission
+- description: Description of the permission
+
+## User
+This entity represents a user of the system, with associated personal information and a role. Each user can have one or more roles, which determine their permissions and allowed actions within the system.
+
+Attributes:
+
+- id: Unique identifier for the user
+- name: Full name of the user
+- email: Email address of the user
+- password: Hashed password for the user
+- roles: List of roles assigned to the user
+
+
+## DockingBay
+This entity represents a docking bay at the orbital station where spacecraft can dock and undock. It includes details about its current status and associated spacecraft.
+
+Attributes:
+
+- id: Unique identifier for the docking bay
+- status: The current status of the docking bay (e.g., available, occupied, under maintenance)
+- spacecraft: The spacecraft currently docked at the docking bay (if any)
+- orbital_station_id
+
+
+Functions:
+- updateStatus(newStatus): Update the status of the docking bay
+- assignSpacecraft(spacecraft: Spacecraft): Assign a spacecraft to the docking bay
+- unassignSpacecraft(): Remove the spacecraft assignment from the docking bay
+
+## Shuttlebay
+This entity represents a shuttle bay at the orbital station or a Mars colony where shuttles can dock and undock. It includes details about its current status and associated shuttle.
+
+Attributes:
+
+- id: Unique identifier for the shuttle bay
+- status: The current status of the shuttle bay (e.g., available, occupied, under maintenance)
+- shuttle: The shuttle currently docked at the shuttle bay (if any)
+- orbital_station_id
+
+Functions:
+- updateStatus(newStatus): Update the status of the shuttle bay
+- assignShuttle(shuttle: Shuttle): Assign a shuttle to the shuttle bay
+- unassignShuttle(): Remove the shuttle assignment from the shuttle bay
+
+## ImmigrationRule
+Represents a rule or requirement for immigration to a Mars colony. These rules are used to determine if a passenger is eligible for automatic visa granting or if they need to go through manual visa processing at an immigration counter.
+
+Attributes:
+
+- id: Unique identifier for the immigration rule
+- colonyId: The ID of the Mars colony the rule is associated with
+- ruleType: The type of the rule (e.g., health, criminal record, specialization)
+- ruleDescription: A description of the rule (e.g, min age, criminal record status atc.)
+
 
 ## 4.2 Application Architecture
 
-### Applications
+### Front End Applications
 
 - **Visa Application Portal**: A web or mobile application that allows passengers to register and apply for a temporary visa.
 - **Immigration Database**: A centralized database that stores all data related to passengers, visas, colonies, users, and docking bays.
@@ -39,7 +227,7 @@ In this section, we will define the data entities, relationships, data flows, an
 
 ## 4.3 Microservices
 
-Here's a brief summary of which microservices are responsible for database which entities:
+<!-- Here's a brief summary of which microservices are responsible for database which entities:
 
 Passenger Management Service - Passenger
 Immigration Service - ImmigrationCounter
@@ -49,7 +237,10 @@ Orbital Station Manager Service - OrbitalStation,
 Shuttle Bay Management Service - Shuttle, Shuttlebay
 User Management Service - User, Role, SystemPermission
 Spaceline Management Microservice - Spaceline, Spacecraft
-Flight Management Service - Flight
+Flight Management Service - Flight -->
+
+
+![alt text](./pictures/service_service_matrix.png "Title")
 
 
 ### 4.3.1 Passenger Management Service
@@ -247,4 +438,41 @@ Manage spacecraft capacities
 - `GET /spacecrafts/{id}/docking-bay-assignments`: Get docking bay assignments
 
 
+## 5. Front End applications
+
+1. **Visa Application Portal**
+
+2. **Station Operations**
+
+3. **Spacecraft and Shuttle Operations** 
+
+4. **Colony Operations and Resource Allocations**
+
+5. **Admin and Provisioning**
+
 ## 5. Use Cases
+
+## 5.1 Provisioning and Visa Pre-Approval
+
+![alt Visa Process Sequence](./pictures/provisioning_preapproval.png)
+
+## 5.1 PassengerRegistration
+
+Passengers arriving at the Mars station register using the web or mobile application.
+
+![alt Visa Process Sequence](./pictures/passenger_registration.png)
+
+## 5.2 Visa Application
+
+### 5.2.1 In Application Portal
+![alt Visa Process Sequence](./pictures/visa_application.png)
+
+### 5.2.1 At The Immigration Counter
+
+![alt Visa Process Sequence](./pictures/immigration_counter.png)
+
+
+## 5.3 Colony Rules Checking and Resource Granting
+
+![alt Visa Process Sequence](./pictures/grant_resources.png)
+

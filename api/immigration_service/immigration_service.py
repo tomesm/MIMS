@@ -60,16 +60,17 @@ async def handle_notification():
             r = httpx.post(url)
             # upon receiving confirmation update passenger status: "visa_granted"
             if r.status_code == 200:
-                passenger["status"] = "visa_granted"
+                passenger["status"] = "visa_pre_granted"
+                await _update_passenger(passenger)
                 # Send visa request to colony service
-                visa_url = f"http://0.0.0.0:3032/colonies/{colony_id}/visas"
-                r = httpx.post(visa_url)
-                logging.info("Visa response: " + str(r.json()))
+                # visa_url = f"http://0.0.0.0:3032/colonies/{colony_id}/visas"
+                # r = httpx.post(visa_url)
+                # # logging.info("Visa response: " + str(r.json()))
 
-                if r.status_code == 200:
-                    passenger["visa_id"] = r.json()["visa_id"]
-                    logging.info(f"Updated passenger with visa: {passenger}")
-                    await _update_passenger(passenger)
+                # if r.status_code == 200:
+                #     passenger["visa_id"] = r.json()["visa_id"]
+                #     # logging.info(f"Updated passenger with visa: {passenger}")
+                #     await _update_passenger(passenger)
             else:
                 passenger["status"] = "visa_denied"
                 await _update_passenger(passenger)
