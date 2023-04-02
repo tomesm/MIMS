@@ -2,6 +2,7 @@ import datetime
 import time
 from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi.param_functions import Path
+from fastapi.middleware.cors import CORSMiddleware
 from uuid import uuid4
 import uvicorn
 import json
@@ -20,14 +21,22 @@ from typing import Optional
 app = FastAPI()
 logging.basicConfig(level=logging.INFO)
 
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # You can specify the allowed origins here, use "*" to allow all origins
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-class VisaResponse(BaseModel):
-    id: int
-    duration: int
-    issue_date: datetime
-    immigration_counter_id: int
-    colony_id: int
 
+average_resource = {
+    "air": 654,
+    "lodging": 1,
+    "food": 67,
+    "water": 100
+}
 
 @app.get("/")
 def read_root():
@@ -36,40 +45,13 @@ def read_root():
 
 ######### Visas #########
 
-@app.post("/colonies/{colony_id}/visas", response_model=VisaResponse)
-async def create_visa(colony_id: int):
-    # Check if the colony and passenger exist
-    colony = colony_dao.get_colony(colony_id)
-
-    if not colony:
-        raise HTTPException(status_code=404, detail="Colony or passenger not found")
-    # Set visa attributes (customize these as needed)
-    visa_duration = 90  # Set the visa duration (in days)
-    issue_date = datetime.now()  # Set the visa issue date
-    immigration_counter_id = 1  # Set the immigration counter ID (customize this)
-
-    # Insert the new visa record into the database
-    # visa_id = visa_dao.create_visa(
-    #     colony_id,
-    #     passenger_id,        
-    #     visa_duration,
-    #     issue_date,
-    #     immigration_counter_id,
-    # )
-
-    # Return the created visa
-    return VisaResponse(
-        id=visa_id,
-        duration=visa_duration,
-        issue_date=issue_date,
-        immigration_counter_id=immigration_counter_id,
-        colony_id=colony_id,
-    )
+@app.post("/colonies/{colony_id}/visas")
+async def create_visa(colony_id):
+    # Just mock it for now
+    return {"visa_id" : str(uuid4())}
+    
 
 ######### Colonies  #########
-
-
-
 
 # Create colony
 @app.post("/colonies")
@@ -127,15 +109,20 @@ async def delete_colony(colony_id):
 ############ Resources ############
 
 # API endpoint for grant resource request
+#
+# Algorithm description
+# Each colony has a maximum limit of resources whic can be granted per month
+# Each resource request should contain number of months requested.
+# If the colony can subtract the requested resources from the available resources 
+# without going below the limit, then grant the resource
+# refuse if otherwise
 @app.post("/colonies/{colony_id}/resources/grant")
 async def grant_resource(colony_id):
-    # Get resource for the colony_id
-    # Check if resource is available
-    # If available, grant resource
-    # If not available, return message
-
-    # for POC demo just mock the response
-    # Generate a random number between 0 and 1
+    # Get the colony
+    # colony = colony_dao.get_colony(colony_id)
+    # if colony is None:
+    #     raise HTTPException(status_code=404, detail=f"Colony not found: {colony_id}")
+    
     random_number = random.random()
 
     if random_number <= 0.9:  # 90% probability of success
@@ -150,8 +137,11 @@ async def create_resource(colony_id, request: PutColonyResourceRequest):
     item = {
         "id": str(uuid4()),
         "colony_id": colony_id,
-        "resource_type": request.resource_type,
-        "quantity": request.quantity
+        "name": request.name,
+        "air": request.air,
+        "lodging": request.lodging,
+        "food": request.food,
+        "water": request.water
     }
     error = resource_dao.create_resource(item)
     if error:
@@ -176,16 +166,15 @@ async def list_resources(colony_id):
 # Update resource
 @app.put("/colonies/{colony_id}/resources/{resource_id}")
 async def update_resource(colony_id, resource_id, request: PutColonyResourceRequest):
-    item = {
-        "id": resource_id,
-        "colony_id": colony_id,
-        "resource_type": request.resource_type,
-        "quantity": request.quantity
-    }
-    error = resource_dao.update_resource(item)
-    if error:
-        raise HTTPException(status_code=404, detail=f"Error updating resource: {error}")
-    return {"resource:": item}
+    item = resource_dao.get_resource(resource_id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Resource not found")
+    if item:
+        update_data = request.dict(exclude_unset=True)
+        updated_item = {**item, **update_data}
+        return {"resource": resource_dao.update_resource(colony_id, updated_item)}
+    else:
+        raise HTTPException(status_code=404, detail=f"Resource {resource_id} not found")
 
 
 # Delete resource

@@ -75,44 +75,43 @@ def list_resources(colony_id):
 
 
 def update_resource(resource_id, resource):
-    logging.info(f"Updating resource: {resource} (id: {resource_id}")
+    # logging.info(f"Updating colony: {colony} (id: {colony_id})")
+    logging.info(f"Updating resource: {resource}")
     conn = get_db_connection()
     conn.set_session(autocommit=True)
     try:
-        query = '''
+        # Prepare the SET clause for updating only provided fields
+        update_fields = []
+        update_values = []
+        for field, value in resource.items():
+            if value is not None:
+                update_fields.append(f"{field} = %s")
+                update_values.append(value)
+
+        query = f'''
             UPDATE colony_resource
-            SET colony_id = %s,
-                name = %s,
-                air = %s,
-                lodging = %s,
-                food = %s,
-                water = %s
+            SET {', '.join(update_fields)}
             WHERE id = %s
         '''
+        update_values.append(resource_id)
         cur = conn.cursor(cursor_factory=RealDictCursor)
-        # logging.info(f"Executed query: {cur.mogrify(query, (resource_id,)).decode('utf-8')}") 
-        logging.info(f"Cursor description: {cur.description}") 
-        logging.info(f"Row count: {cur.rowcount}")
-        cur.execute(query, (resource["colony_id"],
-                            resource["name"],
-                            resource["air"],
-                            resource["lodging"],
-                            resource["food"],
-                            resource["water"],
-                            resource_id))
+        cur.execute(query, tuple(update_values))
+
+        conn.commit()
+
         # Query the updated record
-        fetch_query = '''
-            SELECT * FROM passenger WHERE id = %s
-        '''
-        cur.execute(fetch_query, (resource_id,))
-        updated_resource = cur.fetchone()
-        logging.info(f"resource fetched: {updated_resource}")
+        # fetch_query = '''
+        #     SELECT * FROM colony_resource WHERE id = %s
+        # '''
+        # cur.execute(fetch_query, (resource_id,))
+        updated_resource = get_resource(resource_id)
+        logging.info(f"Updated resource: {updated_resource}")
         cur.close()
         conn.close()
         return updated_resource
     except Error as e:
-        message = f"updating resource {e}"
-        return {"error": message}
+        logging.error(f"updating resource {e}")
+        # return {"error": message}
 
 
 def delete_resource(resource_id):

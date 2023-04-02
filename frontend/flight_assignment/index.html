@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shuttle Assignment Simulation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #007BFF;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 10px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .log {
+            font-size: 14px;
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 300px;
+            overflow-y: scroll;
+        }
+    </style>
+</head>
+<body>
+    <h1>Shuttle Assignment Simulation</h1>
+    <button id="startBtn">Start Simulation</button>
+    <div class="log" id="log"></div>
+
+    <script>
+        const shuttles = [
+            {id: 1, status: 'available'},
+            {id: 2, status: 'available'},
+            {id: 3, status: 'available'},
+        ];
+
+        const flights = [
+            {id: 101, shuttle_id: null},
+            {id: 102, shuttle_id: null},
+            {id: 103, shuttle_id: null},
+        ];
+
+        const logElem = document.getElementById('log');
+
+        function getAvailableShuttle() {
+            return shuttles.find(shuttle => shuttle.status === 'available');
+        }
+
+        function assignShuttleToFlight(flight) {
+            const shuttle = getAvailableShuttle();
+            if (shuttle) {
+                flight.shuttle_id = shuttle.id;
+                shuttle.status = 'busy';
+                logElem.innerHTML += `Assigned shuttle ${shuttle.id} to flight ${flight.id}<br>`;
+            } else {
+                logElem.innerHTML += `No shuttles available for flight ${flight.id}<br>`;
+            }
+        }
+
+        function processFlights() {
+            flights.forEach((flight, index) => {
+                setTimeout(() => {
+                    assignShuttleToFlight(flight);
+                }, index * 1000);
+            });
+        }
+
+        document.getElementById('startBtn').addEventListener('click', () => {
+            logElem.innerHTML = '';
+            processFlights();
+        });
+    </script>
+</body>
+</html>

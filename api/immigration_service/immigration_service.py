@@ -3,6 +3,19 @@ import logging
 import uvicorn
 import httpx
 import json
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI()
+logging.basicConfig(level=logging.INFO)
+
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # You can specify the allowed origins here, use "*" to allow all origins
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 colonies = {
@@ -14,11 +27,12 @@ colonies = {
     "52d474af-f112-4967-83af-db8559d3e94a": "Rodina Station",
 }
 
+
+
 passengers_service_base_url = "http://0.0.0.0:3030"
 colony_service_base_url = "http://0.0.0.0:3032"
 
-app = FastAPI()
-logging.basicConfig(level=logging.INFO)
+
 
 
 @app.get("/")
@@ -40,15 +54,22 @@ async def handle_notification():
         # logging.info("Colony rules: " + str(colony_rules))    
 
         if _evaluate_passenger(passenger, colony_rules):
-            logging.info("Passenger is eligible for automatic visa grant: " + str(passenger["first_name"] + " " + passenger["last_name"]))
+            # logging.info("Passenger is eligible for automatic visa grant: " + str(passenger["first_name"] + " " + passenger["last_name"]))
             # ask for granting colony resources
             url = f"http://0.0.0.0:3032/colonies/{colony_id}/resources/grant"
-            logging.info("url: " + str(url))
             r = httpx.post(url)
             # upon receiving confirmation update passenger status: "visa_granted"
             if r.status_code == 200:
                 passenger["status"] = "visa_granted"
-                await _update_passenger(passenger)
+                # Send visa request to colony service
+                visa_url = f"http://0.0.0.0:3032/colonies/{colony_id}/visas"
+                r = httpx.post(visa_url)
+                logging.info("Visa response: " + str(r.json()))
+
+                if r.status_code == 200:
+                    passenger["visa_id"] = r.json()["visa_id"]
+                    logging.info(f"Updated passenger with visa: {passenger}")
+                    await _update_passenger(passenger)
             else:
                 passenger["status"] = "visa_denied"
                 await _update_passenger(passenger)
@@ -63,9 +84,8 @@ async def handle_notification():
 
 async def _update_passenger(passenger):
     passenger_id = passenger["id"]
-    r = httpx.put(f"http://0.0.0.0:3030/passengers?passenger_id={passenger_id}", json={f"status": passenger["status"]})
+    r = httpx.put(f"http://0.0.0.0:3030/passengers?passenger_id={passenger_id}", json=passenger)
 
-    # logging.info("passenger: " + str(json.dumps(passenger)))
 
     if r.status_code == 200:
         print("Passenger status updated successfully")
@@ -95,7 +115,6 @@ def _evaluate_passenger(passenger, colony_rules) -> bool:
     rules = colony_rules.get("rules:")
     for rule in rules:
         if not _evaluate_rule(passenger, rule):
-            logging.info(f"Failed rule: {rule}")
             return False
     return True
 

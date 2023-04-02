@@ -8,9 +8,20 @@ import passenger_dao as ph
 from requests import PutPassengerRequest
 import logging
 import httpx
+
+from fastapi.middleware.cors import CORSMiddleware
  
 app = FastAPI()
 logging.basicConfig(level=logging.DEBUG)
+
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # You can specify the allowed origins here, use "*" to allow all origins
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/")

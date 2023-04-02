@@ -35,7 +35,7 @@ erDiagram
         int inhabitants
     }
 
-    ColonyResource {
+    Resource {
         int id
         string name
         int colony_id
@@ -133,6 +133,23 @@ erDiagram
         string description
     }
 
+    Resource {
+        string name
+        int air
+        int food
+        int lodging
+        int water
+        int limit_id
+    }
+
+    Limit {
+        type name
+        int air
+        int food
+        int lodging
+        int water
+    }
+
     Passenger }|--|| Flight : has
     Passenger ||--|| Visa : has
     Flight }|--|| Spaceline : operated_by
@@ -143,14 +160,14 @@ erDiagram
     Spacecraft }|--|| Spaceline : belongs_to
     Spaceline ||--|{ DockingBay : reserves
     Colony ||--o{ ImmigrationRule : has
-    Colony ||--o{ ColonyResource : has
     OrbitalStation ||--|{ ShuttleBay : has
     OrbitalStation ||--|{ DockingBay : has
     OrbitalStation ||--|{ ImmigrationCounter : has
     Visa }o--|| Colony : valid_for
     Role ||--|{ Permission : has
     User ||--|{ Role : has
-    User }o--|| ImmigrationCounter : assigned_to
-
+    User }o--|| ImmigrationCounter : can_be_assigned_to
+    User ||--|| Passenger: can_be
+    Colony ||--|| Resource: has
+    Resource ||--|| Limit: has
     
-

@@ -15,5 +15,7 @@ erDiagram
     Visa }o--|| Colony : valid_for
     Role ||--|{ Permission : has
     User ||--|{ Role : has
-    User }o--|| ImmigrationCounter : assigned_to
-
+    User }o--|| ImmigrationCounter : can_be_assigned_to
+    User ||--|| Passenger: can_be
+    Colony ||--|| Resource: has
+    Resource ||--|| ResourceLimit: has

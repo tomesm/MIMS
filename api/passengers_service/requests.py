@@ -13,5 +13,6 @@ class PutPassengerRequest(BaseModel):
     specialization: Optional[str] = None
     ticket_number: Optional[str] = None 
     status: Optional[str] = None
+    visa_id: Optional[str] = None
 
 

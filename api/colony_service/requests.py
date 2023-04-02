@@ -4,10 +4,10 @@ from typing import Optional
 class PutColonyResourceRequest(BaseModel):
     colony_id: Optional[str] = None
     name: Optional[str] = None
-    air: Optional[str] = None
-    lodging: Optional[str] = None
-    food: Optional[str] = None
-    water: Optional[str] = None
+    air: Optional[int] = None
+    lodging: Optional[int] = None
+    food: Optional[int] = None
+    water: Optional[int] = None
 
 class PutImmigrationRuleRequest(BaseModel):
     colony_id: Optional[str] = None
@@ -16,6 +16,6 @@ class PutImmigrationRuleRequest(BaseModel):
 
 
 class PutColonyRequest(BaseModel):
-        name: Optional[str] = None
-        inhabitants: Optional[int] = None
+    name: Optional[str] = None
+    inhabitants: Optional[int] = None
     

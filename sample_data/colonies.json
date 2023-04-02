@@ -1,0 +1,34 @@
+{
+  "colonies:": [
+    {
+      "id": "52d474af-f112-4967-83af-db8559d3e94a",
+      "name": "Rodina Station",
+      "inhabitants": 1689
+    },
+    {
+      "id": "5ece00f1-b090-44dc-9803-e973f87392b7",
+      "name": "Liberty Base",
+      "inhabitants": 666
+    },
+    {
+      "id": "70542b48-51b9-4498-9f09-1185189da7b0",
+      "name": "Mangalyaan Nagar",
+      "inhabitants": 856
+    },
+    {
+      "id": "71be8b58-13e8-495f-967b-97429be84906",
+      "name": "Xin Tian Di",
+      "inhabitants": 1563
+    },
+    {
+      "id": "7ecd6406-9978-45a4-8406-77e84fff33bc",
+      "name": "Europa Outpost",
+      "inhabitants": 5834
+    },
+    {
+      "id": "de1685b3-3d2d-439d-9476-85ce6f9fc54a",
+      "name": "New Washington",
+      "inhabitants": 9457
+    }
+  ]
+}
