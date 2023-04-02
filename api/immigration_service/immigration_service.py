@@ -2,7 +2,8 @@ from fastapi import FastAPI
 import logging
 import uvicorn
 import httpx
-import json
+import random
+from uuid import uuid4
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -29,11 +30,43 @@ colonies = {
 passengers_service_base_url = "http://0.0.0.0:3030"
 colony_service_base_url = "http://0.0.0.0:3032"
 
+visa_types = [6, 12, 18, 24]
+
 
 @app.get("/")
 def read_root():
     logging.info(" Immigration root endpoint called")
     return {"message": "Hello from immigration"}
+
+
+# apply for visa
+@app.post("/immigration/visa/apply/{passenger_id}")
+async def apply_for_visa(passenger_id: str):
+    
+        r = httpx.get(f"http://0.0.0.0:3030/passengers/{passenger_id}")
+        if r.status_code == 200:
+            passenger= r.json()
+            # logging.info("Passenger: " + passenger)
+
+            status = passenger["status"]
+            if status == "flagged":
+                return {"status": "flagged", "message": "Visa can not be granted automatically to flagged passengers"}
+            elif status == "visa_denied":
+                return {"status": "visa_denied"}
+            else: 
+                parts = status.split(',')
+                # Extract the values
+                status = parts[0]
+                visa_type = int(parts[1])
+                
+                # mock visa granting
+                passenger["status"] = "visa_granted" + "," + str(visa_type)
+                passenger["visa_id"] = str(uuid4())
+                await _update_passenger(passenger)
+                return {"status": "visa_granted", "visa_id": passenger["visa_id"], "visa_type": visa_type}
+                
+
+
 
 
 # Service is notified when a new passenger is added to the system and starts automatic visa process
@@ -49,7 +82,8 @@ async def handle_notification():
             url = f"http://0.0.0.0:3032/colonies/{colony_id}/resources/grant"
             r = httpx.post(url)
             if r.status_code == 200:
-                passenger["status"] = "visa_pre_granted"
+                visa_type = random.choice(visa_types)
+                passenger["status"] = "visa_pre_granted" + "," + str(visa_type)
                 logging.info("Passenger is pre-approved: " + str(passenger["first_name"] + " " + passenger["last_name"]))
                 await _update_passenger(passenger)
             else:
