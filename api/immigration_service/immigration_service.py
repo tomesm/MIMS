@@ -60,7 +60,7 @@ async def apply_for_visa(passenger_id: str):
                 visa_type = int(parts[1])
                 
                 # mock visa granting
-                passenger["status"] = "visa_granted" + "," + str(visa_type)
+                passenger["status"] = "visa_granted"
                 passenger["visa_id"] = str(uuid4())
                 await _update_passenger(passenger)
                 return {"status": "visa_granted", "visa_id": passenger["visa_id"], "visa_type": visa_type}
@@ -84,7 +84,7 @@ async def handle_notification():
             if r.status_code == 200:
                 visa_type = random.choice(visa_types)
                 passenger["status"] = "visa_pre_granted" + "," + str(visa_type)
-                logging.info("Passenger is pre-approved: " + str(passenger["first_name"] + " " + passenger["last_name"]))
+                logging.info("Passenger is pre-approved with resources for " + str(visa_type) + " months: " + str(passenger["first_name"] + " " + passenger["last_name"]))
                 await _update_passenger(passenger)
             else:
                 passenger["status"] = "visa_denied"
