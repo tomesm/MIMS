@@ -10,9 +10,9 @@ Estimated length: 9 months
 
 ### Development Team
 
-- Project Manager: 36000 usd
+- Technical Project Manager/Architect: 9000 usd (not full time)
 - Backend Developer: 63000 usd
-- Frontend Web Developer: 55000 usd
+- Frontend Developer (web + mobile): 65000 usd
 - Devops Engineer: 57000 usd
 
 ### Infrastructure
@@ -22,7 +22,7 @@ Estimated length: 9 months
 
 ### Miscellaneous
 
-- Third-party APIs: none
+- Third-party APIs: 300$/month
 - Development Tools & Software: none
 
 ## Total Estimated Cost
@@ -31,5 +31,9 @@ Estimated length: 9 months
 - Infrastructure: 2520
 - Miscellaneous: 1000
 
-Grand Total: 214530
+Grand Total: 227520
+
+## Estimated monthly maintenace
+
+7000 usd (engineers, serves, power, etc)
 

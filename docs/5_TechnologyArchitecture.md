@@ -12,7 +12,9 @@ The following technology stack will be used to develop the Mars immigration syst
 - **Database**: CockroachDB (distributed SQL database)
 - **Orchestration & Deployment**: Kubernetes
 - **Infrastructure**: Local Mars station Kubernetes cluster. IaC will be used (terraform, ansible).
-- **Monitoring**: Grafana, Consul
+- **Monitoring**: Grafana, Consul, Prometheus
+- **Security**: SUSE Rancher for container security
+
 - **Local 5G Network**: A local 5G network provided within the Mars station to enable seamless communication between passengers, immigration officers, station managers, spaceline dispatchers, and colony officials.
 
 
