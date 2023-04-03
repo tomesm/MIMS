@@ -82,7 +82,7 @@ async def handle_notification():
             url = f"http://0.0.0.0:3032/colonies/{colony_id}/resources/grant"
             r = httpx.post(url)
             if r.status_code == 200:
-                visa_type = random.choice(visa_types)
+                visa_type = r.json()["visa_type"]
                 passenger["status"] = "visa_pre_granted" + "," + str(visa_type)
                 logging.info("Passenger is pre-approved with resources for " + str(visa_type) + " months: " + str(passenger["first_name"] + " " + passenger["last_name"]))
                 await _update_passenger(passenger)

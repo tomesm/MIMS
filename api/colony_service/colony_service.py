@@ -25,12 +25,7 @@ app.add_middleware(
 )
 
 
-average_resource = {
-    "air": 654,
-    "lodging": 1,
-    "food": 67,
-    "water": 100
-}
+
 
 @app.get("/")
 def read_root():
@@ -104,21 +99,61 @@ async def delete_colony(colony_id):
 # API endpoint for grant resource request
 #
 # Algorithm description
-# Each colony has a maximum limit of resources whic can be granted per month
+# Each colony has a minimum limit of resources which can be granted per month
 # Each resource request should contain number of months requested.
 # If the colony can subtract the requested resources from the available resources 
 # without going below the limit, then grant the resource
 # refuse if otherwise
+resource_limit = {
+    "air": 654,
+    "lodging": 1,
+    "food": 67,
+    "water": 100
+}
+
+colony_resource = {
+    "air": 675756756734,
+    "lodging": 34,
+    "food": 456,
+    "water": 57457567
+}
 @app.post("/colonies/{colony_id}/resources/grant")
 async def grant_resource(colony_id):
-    #Mock it for now
+    # #Mock it for now
     
-    random_number = random.random()
+    # random_number = random.random()
 
-    if random_number <= 0.9:  # 90% probability of success
-        return {"message": f"Resources granted"}
-    else:  # 10% probability of error
-        raise HTTPException(status_code=404, detail="Resources could not be granted")
+    # if random_number <= 0.9:  # 90% probability of success
+    #     return {"message": f"Resources granted"}
+    # else:  # 10% probability of error
+    #     raise HTTPException(status_code=404, detail="Resources could not be granted")
+
+    resource_limit = {
+    "air": 654,
+    "lodging": 1,
+    "food": 67,
+    "water": 100
+    }
+
+    colony_resource = resource_dao.list_resources(colony_id)[0]
+
+
+    visa_types = [6, 12, 18, 24]
+
+    # Find the maximum number of months that can be granted without going below the limit
+    max_grantable_months = 0
+    for visa_type in visa_types:
+        requested_resources = {key: value * visa_type for key, value in resource_limit.items()}
+        can_grant = all(colony_resource[key] - requested_resources[key] >= resource_limit[key] for key in resource_limit)
+        
+        if can_grant:
+            max_grantable_months = visa_type
+        else:
+            break
+
+    if max_grantable_months == 0:
+        raise HTTPException(status_code=444, detail="Resources could not be granted")
+    return {"visa_type": max_grantable_months}
 
 
 # Create resource for given colony

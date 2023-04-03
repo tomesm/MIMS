@@ -12,7 +12,7 @@ Estimated length: 9 months
 
 - Project Manager: 36000 usd
 - Backend Developer: 63000 usd
-- Frontend Developer: 55000 usd
+- Frontend Web Developer: 55000 usd
 - Devops Engineer: 57000 usd
 
 ### Infrastructure
