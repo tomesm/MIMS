@@ -8,27 +8,15 @@ The following technology stack will be used to develop the Mars immigration syst
 
 - **Programming Language**: Go/Rust
 - **API Framework**: net/http(golang)/Actix(Rust)
-- **Frontend**: React.js (web) or React Native (mobile)
+- **Frontend**: React.js (web) and  React Native (mobile)
 - **Database**: CockroachDB (distributed SQL database)
 - **Orchestration & Deployment**: Kubernetes
-- **Infrastructure**: Local Mars station Kubernetes cluster
-
-## 5.2 Infrastructure Components
-
-### Cloud Services
-
-- **Kubernetes**: A container orchestration platform used for automating deployment, scaling, and management of containerized applications.
-- **Local Mars station Kubernetes cluster**: A local Kubernetes cluster deployed within the Mars station to support the Mars immigration system. This will ensure low latency and independence from Earth-based services.
-
-### Databases
-
-- **CockroachDB**: A cloud-native, distributed SQL database that provides horizontal scalability, strong consistency, and survivability. It will be used to store all data related to passengers, visas, colonies, users, and docking bays.
-
-### Networking
-
+- **Infrastructure**: Local Mars station Kubernetes cluster. IaC will be used (terraform, ansible).
+- **Monitoring**: Grafana, Consul
 - **Local 5G Network**: A local 5G network provided within the Mars station to enable seamless communication between passengers, immigration officers, station managers, spaceline dispatchers, and colony officials.
 
-## 5.3 Technology Considerations
+
+## 5.2 Technology Considerations
 
 - The use of Kubernetes allows for easy scaling and management of the system components, ensuring high availability and fault tolerance.
 

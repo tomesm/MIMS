@@ -425,17 +425,31 @@ Manage spacecraft capacities
 - `GET /spacecrafts/{id}/docking-bay-assignments`: Get docking bay assignments
 
 
-## 5. Front End applications
+## 5. Front End Components
+
+As this is a RBAC system, after logging the user will be shown with frontend components based on assigned role/roles.
+The main layout will be in form of dashboard with following components:
 
 1. **Visa Application Portal**
 
+Main frontend for the passengers. They can apply for visa. They will see notifications, guadances etc. her.
+
 2. **Station Operations**
+
+Shows all metric, monitoring data etc.
 
 3. **Spacecraft and Shuttle Operations** 
 
+For managing Shuttles, Spacecrafts.
+
 4. **Colony Operations and Resource Allocations**
 
+Colony officials main interface for managing colony resources and rules.
+
 5. **Admin and Provisioning**
+
+Administration interface.
+
 
 ## 5. Use Cases
 
@@ -462,4 +476,13 @@ Passengers arriving at the Mars station register using the web or mobile applica
 ## 5.3 Colony Rules Checking and Resource Granting
 
 ![alt Visa Process Sequence](./pictures/grant_resources.png)
+
+## 5.4 Shuttle Assignment
+
+![alt Visa Process Sequence](./pictures/docking_bay_assignment.png)
+
+
+## 5.5 Shuttle Assignment
+
+![alt Visa Process Sequence](./pictures/shuttle_assignment.png)
 
