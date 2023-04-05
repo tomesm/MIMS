@@ -3,6 +3,8 @@ docker volume create roach1
 docker volume create roach2
 docker volume create roach3
 
+
+# Insecure cluster
 docker run -d \
 --name=roach1 \
 --hostname=roach1 \
